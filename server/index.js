@@ -1,5 +1,6 @@
 const express = require('express');
 const http = require('http');
+const path = require('path');
 const { WebSocketServer, WebSocket } = require('ws');
 const { v4: uuidv4 } = require('uuid');
 const cors = require('cors');
@@ -24,6 +25,11 @@ function rewriteHtml(html, tunnelId) {
   html = html.replace(/(<head[^>]*>)/i, `$1\n  <base href="${base}/">`);
   return html;
 }
+
+// ---------- Serve Frontend Static Files ----------
+// In production (after `npm run build`), serve the React app from server/public/
+const publicDir = path.join(__dirname, 'public');
+app.use(express.static(publicDir));
 
 // ---------- REST API ----------
 app.get('/health', (req, res) => {
@@ -92,6 +98,17 @@ app.all('/t/:tunnelId*', async (req, res) => {
     clearTimeout(timeout);
     tunnel.pendingRequests.delete(reqId);
     res.status(502).send('Failed to forward request to tunnel client.');
+  }
+});
+
+// ---------- SPA Catch-all ----------
+// Any non-API, non-tunnel route serves the React app (client-side routing)
+app.get('*', (req, res) => {
+  const index = path.join(__dirname, 'public', 'index.html');
+  if (require('fs').existsSync(index)) {
+    res.sendFile(index);
+  } else {
+    res.status(404).send('Frontend not built. Run: npm run build');
   }
 });
 

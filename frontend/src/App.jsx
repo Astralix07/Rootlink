@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from 'react'
 import './index.css'
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3001'
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || window.location.origin
 
 const IDLE = 'idle'
 const CONNECTING = 'connecting'

@@ -1,0 +1,15 @@
+{
+    "name": "rootlink",
+    "version": "1.0.0",
+    "description": "Rootlink tunneling service — server + frontend in one",
+    "scripts": {
+        "build": "cd frontend && npm install && npm run build && xcopy /E /I /Y dist ..\\server\\public",
+        "start": "node server/index.js",
+        "dev:server": "node server/index.js",
+        "dev:frontend": "cd frontend && npm run dev",
+        "install:all": "cd server && npm install && cd ../frontend && npm install && cd ../client && npm install"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}

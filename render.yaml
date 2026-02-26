@@ -1,23 +1,10 @@
 services:
-  # ----- Rootlink Tunnel Server (Web Service) -----
   - type: web
-    name: rootlink-server
+    name: rootlink
     runtime: node
-    rootDir: server
-    buildCommand: npm install
-    startCommand: node index.js
+    buildCommand: cd frontend && npm install && npm run build && cp -r dist ../server/public
+    startCommand: node server/index.js
     envVars:
-      - key: PORT
-        value: 10000
+      - key: NODE_ENV
+        value: production
     healthCheckPath: /health
-
-  # ----- Rootlink UI (Static Site) -----
-  - type: web
-    name: rootlink-ui
-    runtime: static
-    rootDir: frontend
-    buildCommand: npm install && npm run build
-    staticPublishPath: dist
-    envVars:
-      - key: VITE_SERVER_URL
-        sync: false   # Set this manually in Render dashboard to your server URL
