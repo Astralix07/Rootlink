@@ -1,8 +1,6 @@
 import { useState, useRef, useCallback } from 'react'
 import './index.css'
 
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || window.location.origin
-
 const IDLE = 'idle'
 const CONNECTING = 'connecting'
 const ACTIVE = 'active'
@@ -43,12 +41,13 @@ export default function App() {
     setPhase(CONNECTING)
 
     try {
-      const res = await fetch(`${SERVER_URL}/api/new`)
+      const res = await fetch(`/api/new`)
       if (!res.ok) throw new Error(`Server responded with ${res.status}`)
       const { tunnelId } = await res.json()
 
-      const wsBase = SERVER_URL.replace(/^http/, 'ws')
-      setPublicUrl(`${SERVER_URL}/t/${tunnelId}/`)
+      const origin = window.location.origin
+      const wsBase = origin.replace(/^http/, 'ws')
+      setPublicUrl(`${origin}/t/${tunnelId}/`)
       setCliCommand(`node client/index.js ${trimmed} ${tunnelId} ${wsBase}`)
       setPhase(ACTIVE)
     } catch (err) {
