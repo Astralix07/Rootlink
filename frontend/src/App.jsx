@@ -41,7 +41,8 @@ export default function App() {
     setPhase(CONNECTING)
 
     try {
-      const res = await fetch(`/api/new`)
+      const serverUrl = import.meta.env.VITE_SERVER_URL || ''
+      const res = await fetch(`${serverUrl}/api/new`)
       if (!res.ok) throw new Error(`Server responded with ${res.status}`)
       const { tunnelId } = await res.json()
 
