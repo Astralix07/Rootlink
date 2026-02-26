@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "Rootlink tunneling service — server + frontend in one",
     "scripts": {
-        "build": "cd frontend && npm install && npm run build && cp -r dist ../server/public",
+        "build": "cd server && npm install && cd ../frontend && npm install && npm run build && cp -r dist ../server/public",
         "start": "node server/index.js",
         "dev:server": "node server/index.js",
         "dev:frontend": "cd frontend && npm run dev",
